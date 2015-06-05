@@ -1,0 +1,110 @@
+// Return the Gmsh element type number, inferred from the number of
+// degrees of freedom per element.
+func int elemType (int n)
+{
+    int e = 0;
+    
+    if ( n == 2 )       // EDGE2
+    {
+        e = 1;
+    }
+    else if ( n == 3 )  // TRI3
+    {
+        e = 2;
+    }
+    else if ( n == 6 )  // TRI6
+    {
+        e = 9;
+    }
+    else                // Shouldn't get here!
+    {
+        cout << "Unknown element type, having " << n << "nodes!" << endl;
+        assert (false);
+    }
+    
+    return e;    
+}
+
+// Write the mesh Th to "filename" in the Gmsh (.msh) file format.
+macro writeMesh (filename, Th) {
+    ofstream GmshFile (filename);
+    
+    GmshFile << "$MeshFormat" << endl;
+    GmshFile << "2.1 0 8" << endl;
+    GmshFile << "$EndMeshFormat" << endl;
+    
+    // Save FreeFem file format.
+    string FreeFemMesh(filename + "_FreeFem++.msh");
+    
+    savemesh(Th, FreeFemMesh);
+    
+    // Save Gmsh file format.
+    ifstream FreeFemFile(FreeFemMesh);
+    
+    // Vertices.
+    int nv = 0;
+    int nt = 0;
+    int ne = 0;
+    
+    FreeFemFile >> nv >> nt >> ne;
+    
+    {
+        GmshFile << endl << "$Nodes" << endl;
+        GmshFile << nv << endl;
+        
+        real coordX = 0.0;
+        real coordY = 0.0;
+        real temp = 0.0;
+        
+        for ( int n = 0; n < nv; ++n )
+        {
+            FreeFemFile >> coordX >> coordY >> temp;
+            
+            GmshFile << n + 1 << " " << coordX << " " << coordY << "  0" << endl;
+        }
+        
+        GmshFile << "$EndNodes" << endl;
+    }
+    
+    // Elements.
+    {
+        int elemType = elemType (3);
+        
+        GmshFile << endl << "$Elements" << endl;
+        GmshFile << nt + ne << endl; /* Elements + boundary sides. */
+        
+        int vertex1 = 0;
+        int vertex2 = 0;
+        int vertex3 = 0;
+        int region = 0;
+        
+        for ( int n = 0; n < nt; ++n )
+        {
+            FreeFemFile >> vertex1 >> vertex2 >> vertex3 >> region;
+            
+            GmshFile << n + 1 << " " << elemType << " 1 " << region << " "
+               << vertex1 << " " << vertex2 << " " << vertex3 << endl;
+        }
+    }
+    
+    // Boundary sides.
+    {
+        int elemType = elemType (2);
+        
+        int vertex1 = 0;
+        int vertex2 = 0;
+        int label = 0;
+                   
+        for ( int n = 0; n < ne; ++n )
+        {
+            FreeFemFile >> vertex1 >> vertex2 >> label;
+            
+            GmshFile << nt + n + 1 << " " << elemType << " 1 " << label << " "
+               << vertex1 << " " << vertex2 << endl;
+        }
+        
+        GmshFile << "$EndElements" << endl;
+    }
+    
+    system("rm " + FreeFemMesh);
+}//

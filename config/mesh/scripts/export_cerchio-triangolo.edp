@@ -1,0 +1,96 @@
+int n = 10;
+
+real xmin = -0.5;
+real xD = 1.0;
+real xmax = 1.5;
+real ymin = -0.3;
+real ymax = 0.3;
+
+real c = 0.0764244;
+real alpha = acos(c / (1 - c));
+real m = sqrt(c * c / (1 - 2 * c));
+
+border b1(t=xmin,xD) {
+  x = t;
+  y = ymin;
+  label = 3;
+}
+
+border b2(t=ymin,ymax) {
+  x = xD;
+  y = t;
+  label = 0; // Bordo interno.
+}
+
+border b3(t=xD,xmin) {
+  x = t;
+  y = ymax;
+  label = 3;
+}
+
+border b4(t=ymax,ymin) {
+  x = xmin;
+  y = t;
+  label = 1;
+}
+
+border b5(t=xD,xmax) {
+    x = t;
+    y = ymin;
+    label = 3;
+}
+
+border b6(t=ymin,ymax) {
+    x = xmax;
+    y = t;
+    label = 2;
+}
+
+border b7(t=xmax,xD) {
+    x = t;
+    y = ymax;
+    label = 3;
+}
+
+border b8(t=ymax,ymin) {
+  x = xD;
+  y = t;
+  label = 0; // Bordo interno.
+}
+
+border b9(t = alpha, 2 * pi - alpha) {
+    x = c * cos(t) + c;
+    y = c * sin(t);
+    label = 4;
+}
+
+border b10(t = c + c * cos(alpha), 1) {
+    x = t;
+    y = m * (t - 1);
+    label = 4;
+}
+
+border b11(t = 1, c + c * cos(alpha)) {
+    x = t;
+    y = - m * (t - 1);
+    label = 4;
+}
+
+mesh Th = buildmesh(b1(4*n) + b2(2*n) + b3(4*n) + b4(n) + b9(-2*n) + b10(-5*n) + b11(-5*n), fixeborder=true);
+mesh Dh = buildmesh(b5(2*n) + b6(2*n) + b7(2*n) + b8(2*n), fixeborder=true);
+
+
+//border b8(t = 0.0, 2 * pi) { x = 0.1 * cos(t) + 1.0; y = 0.1 * sin(t); label = 4; };
+//mesh Th = buildmesh(b1(4*n) + b2(n) + b3(4*n) + b4(n) + b5(2*n) + b6(n) + b7(2*n) + b8(-3*n));
+
+//mesh Th = buildmesh(b1(10 * n) + b2(3 * n) + b3(10 * n) + b4(3 * n) + b5(-n) + b6(-n) + b7(-n) + b8(-n));
+
+mesh Oh = Th + Dh;
+
+plot(Oh, wait = true);
+
+/*
+ * Export to GMSH file format.
+ */
+include "writeMesh.edp"
+writeMesh("cerchio-triangolo_hole.msh", Oh);

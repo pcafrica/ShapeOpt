@@ -1,0 +1,11 @@
+# Directories
+.kateproject.d/
+build/
+Video/
+
+# Files
+.directory
+.kateproject
+*.kdev4
+.fuse_hidden*
+*.orig

@@ -1,0 +1,156 @@
+/**
+ * @mainpage Introduzione
+ * 
+ * @section description Descrizione
+ * 
+ * Questo programma permette di risolvere problemi di ottimizzazione di forma
+ * facendo ricorso a diverse tecniche. @n
+ * Tutti i sorgenti e gli header sono scritti in linguaggio C++11. @n
+ * Il software è stato progettato per l'utilizzo su un sistema operativo Unix-like.
+ * 
+ * @section dependencies Dipendenze
+ * 
+ * Il software richiede che sul sistema siano installate le seguenti dipendenze (tra parentesi la versione minima richiesta):
+ * 
+ * @arg <a href="http://www.cmake.org">CMake</a> (versione 2.8), un tool di configurazione multi-piattaforma;
+ * @arg <a href="http://www.gnu.org/software/make">Make</a> (versione 3.8.1), un tool utilizzato per la compilazione dei
+ * sorgenti;
+ * @arg @anchor GCC <a href="http://www.gnu.org/software/gcc">GCC</a> (versione 4.8), la suite di compilatori GNU Compiler Collection;
+ * @arg @anchor Eigen <a href="http://eigen.tuxfamily.org">Eigen</a> (version 3.2), per gestire matrici, vettori e algebra lineare;
+ * @arg @anchor libMesh <a href="http://libmesh.github.io">libMesh</a> (versione 0.9.3), un framework per risolvere problemi alle
+ * derivate parziali tramite il metodo degli elementi finiti.
+ * 
+ * Viene inoltre utilizzata la seguente libreria, fornita nella cartella @a include/:
+ * 
+ * @arg <a href="http://getpot.sourceforge.net">GetPot</a> (versione 1.0), per effettuare il parsing da riga di comando e di file
+ * di configurazione.
+ * 
+ * @section compile Compilazione
+ * 
+ * Per generare l'eseguibile, aprire il file @a CMakeLists.txt (presente nella cartella principale) e, se necessario, modificarlo
+ * secondo le proprie esigenze.
+ * 
+ * Creare dunque una cartella di compilazione e aprirla:
+ * 
+ * @code
+ *     $ mkdir build
+ *     $ cd build
+ * @endcode
+ * 
+ * Adesso il sistema è pronto per la configurazione:
+ * 
+ * @code
+ *     $ cmake ..
+ * @endcode
+ * 
+ * @note oppure, per generare anche i simboli per il debug:
+ * 
+ * @note
+ * @code
+ *     $ cmake -DCMAKE_BUILD_TYPE=Debug ..
+ * @endcode
+ * 
+ * Inoltre, l'opzione:
+ * 
+ * @code
+ *     -DCMAKE_INSTALL_PREFIX=my_dir
+ * @endcode
+ * 
+ * consentirà di specificare la directory d'installazione, che di default si trova in @a /usr/local.
+ * 
+ * Infine:
+ * 
+ * @code
+ *     $ make
+ * @endcode
+ * 
+ * genererà l'eseguibile @a test e la libreria condivisa @a shapeopt nelle cartelle @a bin/ e @a lib/ (o in quelle specificate nel
+ * file @a CMakeLists.txt) rispettivamente.
+ * 
+ * @section install Installazione
+ * 
+ * Se si desidera installare:
+ * 
+ * @arg l'eseguibile, in @a ${CMAKE_INSTALL_PREFIX}/bin/;
+ * @arg la libreria condivisa, in @a ${CMAKE_INSTALL_PREFIX}/lib/;
+ * @arg gli header, in @a ${CMAKE_INSTALL_PREFIX}/include/shapeopt/;
+ * 
+ * occorre eseguire il comando:
+ * 
+ * @code
+ *     # make install
+ * @endcode
+ * 
+ * È possibile disinstallare tramite:
+ * 
+ * @code
+ *     # make uninstall
+ * @endcode
+ * 
+ * Se <a href="http://www.doxygen.org">Doxygen</a> (versione 3.8.6) e <a href="http://www.graphviz.org">GraphViz</a>
+ * sono installati sul sistema, il seguente comando genererà questa documentazione nella cartella @a doc/ (o in quella specificata
+ * in @a CMakeLists.txt):
+ * 
+ * @code
+ *     $ make doc
+ * @endcode
+ * 
+ * @section configure Impostazione dei parametri
+ * 
+ * @note La cartella di configurazione di default è @a config/.
+ * 
+ * Prima di poter eseguire il programma, occorre settare il file di configurazione (default: @a config.pot).
+ * Al suo interno sarà possibile modificare una lista di parametri, ciascuno dei quali è commentato per 
+ * spiegarne il significato. @n
+ * Ad esempio, si potrà specificare: la mesh da utilizzare (in formato <a href="http://geuz.org/gmsh/">Gmsh</a>),
+ * la directory in cui salvare i file delle soluzioni, il problema da risolvere e la tecnica di ottimizzazione
+ * di forma da utilizzare.
+ * 
+ * È possibile creare diversi file di configurazione, ciascuno con i propri valori per i parametri:
+ * di volta in volta il file da usare può essere specificato da riga di comando prima di eseguire
+ * il programma.
+ * 
+ * @section run Esegui!
+ * 
+ * Per eseguire utilizzando il file di configurazione predefinito (@a config.pot), spostarsi nella cartella
+ * in cui si trova l'eseguibile e digitare:
+ * 
+ * @code
+ *     $ ./test
+ * @endcode
+ * 
+ * Di default, il file di configurazione viene cercato nella cartella <em>../config</em>. @n
+ * 
+ * Per specificare un diverso file di configurazione precedentemente salvato in questa directory:
+ * 
+ * @code
+ *     $ ./test -f configuration_filename
+ * @endcode
+ * 
+ * oppure:
+ * 
+ * @code
+ *     $ ./test --file configuration_filename
+ * @endcode
+ * 
+ * La variabile @a configuration_filename @b non deve contenere il path al file.
+ * 
+ * @warning È anche possibile specificare una diversa directory in cui cercare il file di configurazione
+ * (attraverso un path relativo o assoluto rispetto alla cartella attuale), utilizzando il comando:
+ * 
+ * @warning
+ * @code
+ *     $ ./test -d configuration_directory
+ * @endcode
+ * 
+ * @warning oppure:
+ * 
+ * @warning
+ * @code
+ *     $ ./test --directory configuration_directory
+ * @endcode
+ * 
+ * Una volta terminato il programma, i risultati verranno salvati nella cartella di output (relativa alla directory corrente)
+ * impostata nel file di configurazione.
+ * 
+ */

@@ -1,0 +1,90 @@
+int n = 10;
+
+real xmin = -0.5;
+real xD = 1.20;
+real xmax = 2;
+real ymin = -0.3;
+real ymax = 0.3;
+
+real a = 0.25;
+real b = ((2.5 * 0.6) - 1.42) / (pi * a);
+cout << b;
+
+border b1(t=xmin,xD) {
+  x = t;
+  y = ymin;
+  label = 3;
+}
+
+border b2(t=ymin,ymax) {
+  x = xD;
+  y = t;
+  label = 0; // Bordo interno.
+}
+
+border b3(t=xD,xmin) {
+  x = t;
+  y = ymax;
+  label = 3;
+}
+
+border b4(t=ymax,ymin) {
+  x = xmin;
+  y = t;
+  label = 1;
+}
+
+border b5(t=xD,xmax) {
+    x = t;
+    y = ymin;
+    label = 3;
+}
+
+border b6(t=ymin,ymax) {
+    x = xmax;
+    y = t;
+    label = 2;
+}
+
+border b7(t=xmax,xD) {
+    x = t;
+    y = ymax;
+    label = 3;
+}
+
+border b8(t=ymax,ymin) {
+  x = xD;
+  y = t;
+  label = 0; // Bordo interno.
+}
+
+border b9(t = 1 - 2 * a, 1) {
+    x = t;
+    y = - sqrt(b * b - (b * b) / (a * a) * (t - 1 + a) * (t - 1 + a));
+    label = 4;
+}
+
+border b10(t = 1, 1 - 2 * a) {
+    x = t;
+    y = sqrt(b * b - (b * b) / (a * a) * (t - 1 + a) * (t - 1 + a));
+    label = 4;
+}
+
+mesh Th = buildmesh(b1(4*n) + b2(2*n) + b3(4*n) + b4(n) + b9(-3*n) + b10(-3*n), fixeborder=true);
+mesh Dh = buildmesh(b5(2*n) + b6(n) + b7(2*n) + b8(2*n), fixeborder=true);
+
+
+//border b8(t = 0.0, 2 * pi) { x = 0.1 * cos(t) + 1.0; y = 0.1 * sin(t); label = 4; };
+//mesh Th = buildmesh(b1(4*n) + b2(n) + b3(4*n) + b4(n) + b5(2*n) + b6(n) + b7(2*n) + b8(-3*n));
+
+//mesh Th = buildmesh(b1(10 * n) + b2(3 * n) + b3(10 * n) + b4(3 * n) + b5(-n) + b6(-n) + b7(-n) + b8(-n));
+
+mesh Oh = Th + Dh;
+
+plot(Oh, wait = true);
+
+/*
+ * Export to GMSH file format.
+ */
+include "writeMesh.edp"
+writeMesh("ellisse_hole.msh", Oh);

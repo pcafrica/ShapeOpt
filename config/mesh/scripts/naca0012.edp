@@ -1,0 +1,74 @@
+// NACA 2412 AIRFOIL M=2.0% P=40.0% T=12.0%
+
+func real yt(real t) {
+  real t2 = t * t;
+  real t3 = t2 * t;
+  real t4 = t2 * t2;
+  return 0.17735*sqrt(t)-0.075597*t-0.212836*t2+0.17363*t3-0.06254*t4;
+}
+
+real locmax = 0.4;
+real maxcha = 0.02;
+
+func real theta(real xx) {
+  if (xx < locmax)
+    return atan2(2 * maxcha * (locmax - x), locmax * locmax);
+  else
+    return atan2(2 * maxcha * (locmax -x ), (1-locmax) * (1-locmax));
+}
+
+func real yc(real t) {
+  if (t < locmax)
+    return maxcha * t * (2 * locmax - t) / locmax /locmax;
+  else
+    return maxcha * (1 - t) * (1 + t - 2 * locmax) / (1-locmax) / (1-locmax);
+}
+
+func real upperx(real t) { return t - yt(t) * sin(theta(t)); }
+func real lowerx(real t) { return t + yt(t) * sin(theta(t)); }
+
+func real uppery(real t) { return yc(t) + yt(t) * cos(theta(t)); }
+func real lowery(real t) { return yc(t) - yt(t) * cos(theta(t)); }
+
+border upper(t=0,1) {
+  x = cos(angle) * (upperx(t)-0.5) + sin(angle) * uppery(t) + 0.5;
+  y = cos(angle) * uppery(t) - sin(angle) * (upperx(t)-0.5);
+  label = 4;
+}
+
+border lower(t=0,1) {
+  x = cos(angle) * (lowerx(t)-0.5) + sin(angle) * lowery(t) + 0.5;
+  y = cos(angle) * lowery(t) - sin(angle) * (lowerx(t)-0.5);
+  label = 4;
+}
+
+real xmin = -0.5;
+real xmax = 1.5;
+real ymin = -0.3;// - sin(angle) / 2;
+real ymax = 0.3;// + sin(angle) / 2;
+
+border b1(t=xmin,xD) {
+  x = t;
+  y = ymin;
+  label = 3;
+}
+
+border b2(t=ymin,ymax) {
+  x = xD;
+  y = t;
+  label = 0; // Bordo interno.
+}
+
+border b3(t=xD,xmin) {
+  x = t;
+  y = ymax;
+  label = 3;
+}
+
+border b4(t=ymax,ymin) {
+  x = xmin;
+  y = t;
+  label = 1;
+}
+
+mesh Th = buildmesh(b1(4*n) + b2(2*n) + b3(4*n) + b4(n) + upper(3*n) + lower(-3*n), fixeborder=true);
