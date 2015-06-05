@@ -260,10 +260,7 @@ void ProblemStokesEnergy::fixCP(const MatrixXp & CP_grid, MatrixXp & mu) const
                 (k == 0) || (k == mu.cols() - 1) || (l == 0) || (l == mu.rows() - 1)
             )
             {
-                for ( Index i = 0; i < mesh_->mesh_dimension(); ++i )
-                {
-                    mu(l, k)(i) = 0.0;
-                }
+                mu(l, k) = Point();
             }
         }
     }
@@ -389,11 +386,15 @@ void StokesEnergyHE::assemble()
         {
             for (unsigned int i = 0; i < n_u_dofs; ++i)
                 for (unsigned int j = 0; j < n_u_dofs; ++j)
+                {
                     Kuu(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_v_dofs; ++i)
                 for (unsigned int j = 0; j < n_v_dofs; ++j)
+                {
                     Kvv(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
+                }
         }
         
         for (unsigned int side = 0; side < elem->n_sides(); side++)
@@ -527,30 +528,42 @@ void StokesEnergyState::assemble()
         {
             for (unsigned int i = 0; i < n_u_dofs; i++)
                 for (unsigned int j = 0; j < n_u_dofs; j++)
+                {
                     Kuu(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_u_dofs; i++)
                 for (unsigned int j = 0; j < n_p_dofs; j++)
+                {
                     Kup(i, j) += -JxW[qp] * psi[j][qp] * dphi[i][qp](0);
-                    
-                    
+                }
+                
+                
             for (unsigned int i = 0; i < n_v_dofs; i++)
                 for (unsigned int j = 0; j < n_v_dofs; j++)
+                {
                     Kvv(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_v_dofs; i++)
                 for (unsigned int j = 0; j < n_p_dofs; j++)
+                {
                     Kvp(i, j) += -JxW[qp] * psi[j][qp] * dphi[i][qp](1);
-                    
-                    
+                }
+                
+                
             for (unsigned int i = 0; i < n_p_dofs; i++)
                 for (unsigned int j = 0; j < n_u_dofs; j++)
+                {
                     Kpu(i, j) += -JxW[qp] * psi[i][qp] * dphi[j][qp](0);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_p_dofs; i++)
                 for (unsigned int j = 0; j < n_v_dofs; j++)
+                {
                     Kpv(i, j) += -JxW[qp] * psi[i][qp] * dphi[j][qp](1);
-                    
+                }
+                
         } // end of the quadrature point qp-loop
         
         dof_map.heterogenously_constrain_element_matrix_and_vector (Ke, Fe, dof_indices);
@@ -658,31 +671,43 @@ void StokesEnergyAdjoint::assemble()
         {
             for (unsigned int i = 0; i < n_u_dofs; i++)
                 for (unsigned int j = 0; j < n_u_dofs; j++)
+                {
                     Kuu(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_u_dofs; i++)
                 for (unsigned int j = 0; j < n_p_dofs; j++)
+                {
                     Kup(i, j) += -JxW[qp] * psi[j][qp] * dphi[i][qp](0);
-                    
-                    
+                }
+                
+                
             for (unsigned int i = 0; i < n_v_dofs; i++)
                 for (unsigned int j = 0; j < n_v_dofs; j++)
+                {
                     Kvv(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_v_dofs; i++)
                 for (unsigned int j = 0; j < n_p_dofs; j++)
+                {
                     Kvp(i, j) += -JxW[qp] * psi[j][qp] * dphi[i][qp](1);
-                    
-                    
+                }
+                
+                
             for (unsigned int i = 0; i < n_p_dofs; i++)
                 for (unsigned int j = 0; j < n_u_dofs; j++)
+                {
                     Kpu(i, j) += -JxW[qp] * psi[i][qp] * dphi[j][qp](0);
-                    
+                }
+                
             for (unsigned int i = 0; i < n_p_dofs; i++)
                 for (unsigned int j = 0; j < n_v_dofs; j++)
+                {
                     Kpv(i, j) += -JxW[qp] * psi[i][qp] * dphi[j][qp](1);
-                    
-                    
+                }
+                
+                
             Gradient du(stateAdj_.get_system(problem_.name_).point_gradient(u_var, xyz[qp]));
             Gradient dv(stateAdj_.get_system(problem_.name_).point_gradient(v_var, xyz[qp]));
             

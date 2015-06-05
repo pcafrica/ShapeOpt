@@ -196,10 +196,7 @@ void ProblemElasticity::fixCP(const MatrixXp & CP_grid, MatrixXp & mu) const
                 (k == 0) || (k == mu.cols() - 1)
             )
             {
-                for ( Index i = 0; i < mesh_->mesh_dimension(); ++i )
-                {
-                    mu(l, k)(i) = 0.0;
-                }
+                mu(l, k) = Point();
             }
         }
     }
@@ -321,15 +318,24 @@ void ElasticityHE::assemble()
         for (unsigned int qp = 0; qp < qrule.n_points(); qp++)
         {
             for (unsigned int i = 0; i < n_u_dofs; ++i)
+            {
                 for (unsigned int j = 0; j < n_u_dofs; ++j)
+                {
                     Kuu(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
-                    
+                }
+            }
+            
             for (unsigned int i = 0; i < n_v_dofs; ++i)
+            {
                 for (unsigned int j = 0; j < n_v_dofs; ++j)
+                {
                     Kvv(i, j) += JxW[qp] * (dphi[i][qp] * dphi[j][qp]);
+                }
+            }
         }
         
         for (unsigned int side = 0; side < elem->n_sides(); side++)
+        {
             if (elem->neighbor(side) == NULL)
             {
                 const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
@@ -356,7 +362,8 @@ void ElasticityHE::assemble()
                     }
                 }
             }
-            
+        }
+        
         dof_map.constrain_element_matrix_and_vector (Ke, Fe, dof_indices);
         
         system.matrix->add_matrix (Ke, dof_indices);
@@ -430,87 +437,96 @@ void ElasticityState::assemble()
         for (unsigned int qp = 0; qp < qrule.n_points(); qp++)
         {
             for (unsigned int i = 0; i < n_u_dofs; i++)
+            {
                 for (unsigned int j = 0; j < n_u_dofs; j++)
                 {
-                    unsigned int C_i, C_j, C_k, C_l;
-                    C_i = 0, C_k = 0;
+                    unsigned int Ci, Cj, Ck, Cl;
+                    Ci = 0, Ck = 0;
                     
-                    C_j = 0, C_l = 0;
-                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 0;
+                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 0;
-                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 0;
+                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 0, C_l = 1;
-                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 1;
+                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 1;
-                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 1;
+                    Kuu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                 }
-                
+            }
+            
             for (unsigned int i = 0; i < n_u_dofs; i++)
+            {
                 for (unsigned int j = 0; j < n_v_dofs; j++)
                 {
-                    unsigned int C_i, C_j, C_k, C_l;
-                    C_i = 0, C_k = 1;
+                    unsigned int Ci, Cj, Ck, Cl;
+                    Ci = 0, Ck = 1;
                     
                     
-                    C_j = 0, C_l = 0;
-                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 0;
+                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 0;
-                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 0;
+                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 0, C_l = 1;
-                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 1;
+                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 1;
-                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 1;
+                    Kuv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                 }
-                
+            }
+            
             for (unsigned int i = 0; i < n_v_dofs; i++)
+            {
                 for (unsigned int j = 0; j < n_u_dofs; j++)
                 {
-                    unsigned int C_i, C_j, C_k, C_l;
-                    C_i = 1, C_k = 0;
+                    unsigned int Ci, Cj, Ck, Cl;
+                    Ci = 1, Ck = 0;
                     
                     
-                    C_j = 0, C_l = 0;
-                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 0;
+                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 0;
-                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 0;
+                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 0, C_l = 1;
-                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 1;
+                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 1;
-                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 1;
+                    Kvu(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                 }
-                
+            }
+            
             for (unsigned int i = 0; i < n_v_dofs; i++)
+            {
                 for (unsigned int j = 0; j < n_v_dofs; j++)
                 {
-                    unsigned int C_i, C_j, C_k, C_l;
-                    C_i = 1, C_k = 1;
+                    unsigned int Ci, Cj, Ck, Cl;
+                    Ci = 1, Ck = 1;
                     
                     
-                    C_j = 0, C_l = 0;
-                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 0;
+                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 0;
-                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 0;
+                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 0, C_l = 1;
-                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 0, Cl = 1;
+                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                     
-                    C_j = 1, C_l = 1;
-                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(C_i, C_j, C_k, C_l) * dphi[i][qp](C_j) * dphi[j][qp](C_l));
+                    Cj = 1, Cl = 1;
+                    Kvv(i, j) += JxW[qp] * (evaluateElasticityTensor(Ci, Cj, Ck, Cl) * dphi[i][qp](Cj) * dphi[j][qp](Cl));
                 }
+            }
         }
         
         
         for (unsigned int side = 0; side < elem->n_sides(); side++)
+        {
             if (elem->neighbor(side) == NULL)
             {
                 const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
@@ -529,8 +545,8 @@ void ElasticityState::assemble()
                     }
                 }
             }
-            
-            
+        }
+        
         dof_map.constrain_element_matrix_and_vector (Ke, Fe, dof_indices);
         
         system.matrix->add_matrix (Ke, dof_indices);

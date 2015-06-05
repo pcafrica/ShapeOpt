@@ -77,7 +77,15 @@ void ShapeOptimization::apply()
         applyPerturbation(*perturbation);
         std::cout << "    Done." << std::endl << std::endl;
         
-        checkDomain();
+        try
+        {
+            checkDomain();
+        }
+        catch ( const std::exception & genericException )
+        {
+            throw;
+        }
+        
         std::cout << "Deformed volume: " << getVolume() << std::endl << std::endl;
         
         std::cout << "Printing the results" << std::endl << std::endl;
@@ -195,5 +203,7 @@ void ShapeOptimization::checkDomain() const
     }
     
     if ( isReversed )
+    {
         throw std::runtime_error("checkDomain(): the deformed mesh has negative volumes.");
+    }
 }
