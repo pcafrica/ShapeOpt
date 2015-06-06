@@ -252,13 +252,15 @@ Point FFD::deform(const Point & point) const
 {
     Point deformed_point(point);
     
+    Point psiPoint = psi(point);
+    
     for ( Index k = 0; k < CP_grid_.cols(); ++k )
     {
         for ( Index l = 0; l < CP_grid_.rows(); ++l )
         {
             for ( Index i = 0; i < mesh_->mesh_dimension(); ++i )
             {
-                deformed_point(i) += basisFunction(psi(point), k, l) * (boundingBox_.second(i) - boundingBox_.first(i)) * mu_(mu_.rows() - l - 1, k)(i);
+                deformed_point(i) += basisFunction(psiPoint, k, l) * (boundingBox_.second(i) - boundingBox_.first(i)) * mu_(mu_.rows() - l - 1, k)(i);
             }
         }
     }
