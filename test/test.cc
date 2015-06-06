@@ -148,7 +148,8 @@ int main(const int argc, const char * const * argv, const char * const * envp)
         
         /*mesh.write("ReferenceMesh.vtu");
         EquationSystems es(mesh);
-        shapeOptimization->applyPerturbation(es);*/
+        shapeOptimization->applyPerturbation(es);
+        problem->get_mesh()->write("DeformedMesh.vtu");*/
         
         delete problem;
         delete shapeOptimization;
