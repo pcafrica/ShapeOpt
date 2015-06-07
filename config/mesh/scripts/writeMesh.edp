@@ -33,15 +33,15 @@ macro writeMesh (filename, Th) {
     GmshFile << "2.1 0 8" << endl;
     GmshFile << "$EndMeshFormat" << endl;
     
-    // Save FreeFem file format.
+    /* Save FreeFem file format. */
     string FreeFemMesh(filename + "_FreeFem++.msh");
     
     savemesh(Th, FreeFemMesh);
     
-    // Save Gmsh file format.
+    /* Save Gmsh file format. */
     ifstream FreeFemFile(FreeFemMesh);
     
-    // Vertices.
+    /* Vertices. */
     int nv = 0;
     int nt = 0;
     int ne = 0;
@@ -66,7 +66,7 @@ macro writeMesh (filename, Th) {
         GmshFile << "$EndNodes" << endl;
     }
     
-    // Elements.
+    /* Elements. */
     {
         int elemType = elemType (3);
         
@@ -87,7 +87,7 @@ macro writeMesh (filename, Th) {
         }
     }
     
-    // Boundary sides.
+    /* Boundary sides. */
     {
         int elemType = elemType (2);
         

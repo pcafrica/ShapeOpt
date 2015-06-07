@@ -56,7 +56,7 @@ border b1(t=xmin,xD) {
 border b2(t=ymin,ymax) {
   x = xD;
   y = t;
-  label = 0; // Bordo interno.
+  label = 2; // Bordo interno.
 }
 
 border b3(t=xD,xmin) {
