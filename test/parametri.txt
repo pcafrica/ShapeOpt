@@ -23,5 +23,5 @@ std::pair<Point, Point> boundingBox(SW, NE);
 
 BoundaryDisplacement SO(problem, 0.0000125, 200, 1.0e-5, true, 1.0e-2);
 FFD SO(problem, directory, 0.000125, 200, 1.0e-5, true, boundingBox, sub, -1.0e-1);
-FFD_LS SO(problem, directory, 0.000125, 200, 1.0e-5, true, boundingBox, sub, 0.99, -1.0e-1);
+FFD_LS SO(problem, directory, 0.0000125, 200, 1.0e-5, true, boundingBox, sub, 0.99, -1.0e-1);
 DesignElement SO(problem, directory, 0.0000125, 200, 1.0e-5, true, boundingBox, 3, -1.0e-1);
