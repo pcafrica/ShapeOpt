@@ -57,7 +57,7 @@ int main(const int argc, const char * const * argv, const char * const * envp)
         const bool volume_constraint =
             config("Technique/volume_constraint", true);
             
-        const Real armijoSlope = config("Technique/step", 1.0e-2);
+        const Real armijoSlope = config("Technique/armijoSlope", 1.0e-2);
         
         if ( config.vector_variable_size("Technique/boundingBoxSW") != 2
                 || config.vector_variable_size("Technique/boundingBoxNE") != 2 )
