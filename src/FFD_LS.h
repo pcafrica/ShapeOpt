@@ -49,7 +49,7 @@ class FFD_LS : public FFD
         * @param[in] volume_constraint : Specifica se applicare o meno il vincolo di volume
         * @param[in] boundingBox       : Punti a nord est e a sud ovest indicanti il range della bounding box
         * @param[in] sub               : Coppia contenente il numero di intervalli in cui suddividere la base e l'altezza della bounding box
-        * @param[in] alpha             : Parametro di rilassamento per il metodo dei minimi quadrati
+        * @param[in] beta             : Parametro di rilassamento per il metodo dei minimi quadrati
         * @param[in] armijoSlope       : Coefficiente di rilassamento per la regola di Armijo.
         *
         */
@@ -64,14 +64,14 @@ class FFD_LS : public FFD
         virtual void computePerturbation(EquationSystems &, EquationSystems &);
         
     protected:
-        Real alpha_;    /**< @brief Parametro di rilassamento per il metodo dei minimi quadrati */
+        Real beta_;    /**< @brief Parametro di rilassamento per il metodo dei minimi quadrati */
         
         std::vector<Point> border_ref_;   /**< @brief Vettore contenente i punti del bordo*/
         MatrixXr B_x;   /**< @brief Matrice con righe pari al numero di punti sul bordo e colonne pari al numero totale di control point. Rappresenta @f$ \left( b_{k,\ell}^{K, L} ( \vec{\psi} (\vec{x})) \mathfrak{B} \right)_x @f$ per i nodi del bordo */
         MatrixXr B_y;   /**< @brief Matrice con righe pari al numero di punti sul bordo e colonne pari al numero totale di control point. Rappresenta @f$ \left( b_{k,\ell}^{K, L} ( \vec{\psi} (\vec{x})) \mathfrak{B} \right)_y @f$ per i nodi del bordo */
         
-        LDLT<MatrixXr> solver_x; /**< @brief Robust Cholesky Decomposition con pivoting della matrice @f$ \alpha B\_x^T B\_x + (1 - \alpha ) I @f$ */
-        LDLT<MatrixXr> solver_y; /**< @brief Robust Cholesky Decomposition con pivoting della matrice @f$ \alpha B\_y^T B\_y + (1 - \alpha ) I @f$ */
+        LDLT<MatrixXr> solver_x; /**< @brief Robust Cholesky Decomposition con pivoting della matrice @f$ \beta B\_x^T B\_x + (1 - \beta ) I @f$ */
+        LDLT<MatrixXr> solver_y; /**< @brief Robust Cholesky Decomposition con pivoting della matrice @f$ \beta B\_y^T B\_y + (1 - \beta ) I @f$ */
 };
 
 #endif /* FFD_LS_H */

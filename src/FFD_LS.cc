@@ -1,7 +1,7 @@
 #include "FFD_LS.h"
 
-FFD_LS::FFD_LS(const Problem & problem, const std::string & directory, const Real & step, const Index & maxIterationsNo, const Real & tolerance, const bool & volume_constraint, const std::pair<Point, Point> & boundingBox, const std::pair<Index, Index> & sub, const Real & alpha, const Real & armijoSlope)
-    : FFD(problem, directory, step, maxIterationsNo, tolerance, volume_constraint, boundingBox, sub, armijoSlope), alpha_(alpha)
+FFD_LS::FFD_LS(const Problem & problem, const std::string & directory, const Real & step, const Index & maxIterationsNo, const Real & tolerance, const bool & volume_constraint, const std::pair<Point, Point> & boundingBox, const std::pair<Index, Index> & sub, const Real & beta, const Real & armijoSlope)
+    : FFD(problem, directory, step, maxIterationsNo, tolerance, volume_constraint, boundingBox, sub, armijoSlope), beta_(beta)
 {
     //Scanning the border nodes
     Mesh::const_element_iterator       ref_el     = reference_mesh_.active_local_elements_begin();
@@ -40,8 +40,8 @@ FFD_LS::FFD_LS(const Problem & problem, const std::string & directory, const Rea
         }
     }
     
-    solver_x.compute( alpha * B_x.transpose() * B_x + (1 - alpha) * MatrixXd::Identity(LL, LL) );
-    solver_y.compute( alpha * B_y.transpose() * B_y + (1 - alpha) * MatrixXd::Identity(LL, LL) );
+    solver_x.compute( beta * B_x.transpose() * B_x + (1 - beta) * MatrixXd::Identity(LL, LL) );
+    solver_y.compute( beta * B_y.transpose() * B_y + (1 - beta) * MatrixXd::Identity(LL, LL) );
 }
 
 void FFD_LS::computePerturbation(EquationSystems & perturbation, EquationSystems & stateAdj)
