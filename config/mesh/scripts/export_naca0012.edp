@@ -2,7 +2,7 @@
  * Generate the NACA0012 airfoil mesh.
  */
 int n = 10;
-int m = 30;
+int m = 10;
 
 real angle = 0;
 
