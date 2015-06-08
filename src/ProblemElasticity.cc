@@ -12,6 +12,9 @@ void ProblemElasticity::resolveStateAndAdjointEquation(EquationSystems & stateAd
     unsigned int u_var = system.add_variable("u", SECOND, LAGRANGE);
     unsigned int v_var = system.add_variable("v", SECOND, LAGRANGE);
     
+    LinearSolver<Real> * linearSolver = system.get_linear_solver();
+    linearSolver->set_solver_type(CG);
+    
     ElasticityState assState(stateAdj, *this);
     stateAdj.get_system(name_).attach_assemble_object(assState);
     
@@ -158,6 +161,9 @@ void ProblemElasticity::harmonicExtension(EquationSystems & perturbation, Equati
     LinearImplicitSystem & system = perturbation.add_system<LinearImplicitSystem> ("Perturbation");
     unsigned int u_var = system.add_variable("u", SECOND, LAGRANGE);
     unsigned int v_var = system.add_variable("v", SECOND, LAGRANGE);
+    
+    LinearSolver<Real> * linearSolver = system.get_linear_solver();
+    linearSolver->set_solver_type(CG);
     
     ElasticityHE assPerturbation(perturbation, stateAdj, lagrange, *this);
     perturbation.get_system("Perturbation").attach_assemble_object(assPerturbation);

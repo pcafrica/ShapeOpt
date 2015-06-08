@@ -16,6 +16,9 @@ void ProblemStokesEnergy::resolveStateAndAdjointEquation(EquationSystems & state
     unsigned int v_var = stateSystem.add_variable ("v", SECOND);
     stateSystem.add_variable ("p", FIRST);
     
+    LinearSolver<Real> * linearSolverState = stateSystem.get_linear_solver();
+    linearSolverState->set_solver_type(BICGSTAB);
+    
     StokesEnergyState assState(stateAdj, *this);
     stateAdj.get_system(name_).attach_assemble_object(assState);
     
@@ -68,6 +71,9 @@ void ProblemStokesEnergy::resolveStateAndAdjointEquation(EquationSystems & state
     adjointSystem.add_variable ("au", SECOND);
     adjointSystem.add_variable ("av", SECOND);
     adjointSystem.add_variable ("ap", FIRST);
+    
+    LinearSolver<Real> * linearSolverAdjoint = adjointSystem.get_linear_solver();
+    linearSolverAdjoint->set_solver_type(BICGSTAB);
     
     StokesEnergyAdjoint assAdjoint(stateAdj, *this);
     stateAdj.get_system(name_ + "Adjoint").attach_assemble_object(assAdjoint);
@@ -221,6 +227,9 @@ void ProblemStokesEnergy::harmonicExtension(EquationSystems & perturbation, Equa
     LinearImplicitSystem & system = perturbation.add_system<LinearImplicitSystem> ("Perturbation");
     unsigned int u_var = system.add_variable("u", SECOND, LAGRANGE);
     unsigned int v_var = system.add_variable("v", SECOND, LAGRANGE);
+    
+    LinearSolver<Real> * linearSolver = system.get_linear_solver();
+    linearSolver->set_solver_type(CG);
     
     StokesEnergyHE assPerturbation(perturbation, stateAdj, lagrange, *this);
     perturbation.get_system("Perturbation").attach_assemble_object(assPerturbation);

@@ -79,7 +79,7 @@ int main(const int argc, const char * const * argv, const char * const * envp)
         
         std::pair<Index, Index> subdivisions(subdivisionsX, subdivisionsY);
         
-        const Real alpha = config("Technique/FFD_LS/alpha", 0.99);
+        const Real beta = config("Technique/FFD_LS/beta", 0.99);
         const Index order = config("Technique/DesignElement/order", 3);
         
         /**
@@ -129,7 +129,7 @@ int main(const int argc, const char * const * argv, const char * const * envp)
         }
         else if ( techniqueName == "FFD_LS" )
         {
-            shapeOptimization = new FFD_LS(*problem, directory, step, maxIterationsNo, tolerance, volume_constraint, boundingBox, subdivisions, alpha, armijoSlope);
+            shapeOptimization = new FFD_LS(*problem, directory, step, maxIterationsNo, tolerance, volume_constraint, boundingBox, subdivisions, beta, armijoSlope);
         }
         else if ( techniqueName == "DesignElement" )
         {
