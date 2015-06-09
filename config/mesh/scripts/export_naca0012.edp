@@ -36,17 +36,6 @@ border b8(t=ymax,ymin) {
 
 mesh Dh = buildmesh(b5(2*n) + b6(n) + b7(2*n) + b8(2*n), fixeborder=true);
 
-// Cerchio.
-/*border b9(t = 0.0, 2 * pi) { x = 0.1 * cos(t) + 0.25; y = 0.1 * sin(t); label = 4; };
-mesh Th = buildmesh(b1(4*n) + b2(2*n) + b3(4*n) + b4(n) + b9(-m));*/
-
-// Quadrato.
-/*border b5(t = 0.2, 0.4) { x = t; y = -0.1; label = 4; };
-border b6(t = -0.1, 0.1) { x = 0.4 ; y = t; label = 4; };
-border b7(t = 0.4, 0.2) { x = t; y = 0.1; label = 4; };
-border b8(t = 0.1, -0.1) { x = 0.2; y = t; label = 4; };
-mesh Th = buildmesh(b1(4*n) + b2(2*n) + b3(4*n) + b4(n) + b5(-m) + b6(-m) + b7(-m) + b8(-m));*/
-
 mesh Oh = Th + Dh;
 plot(Oh, wait = true);
 
@@ -54,4 +43,4 @@ plot(Oh, wait = true);
  * Export to GMSH file format.
  */
 include "writeMesh.edp"
-writeMesh("naca0012_hole.msh", Oh);
+writeMesh("hole_naca0012.msh", Oh);

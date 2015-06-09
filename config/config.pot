@@ -6,21 +6,21 @@
 ## General parameters.
 ################################################################
 
-mesh = mesh/cerchio_hole.msh
+mesh = mesh/cantilever.msh
 
 # The directory where output files will be saved,
 # relative to the path where the executable is run from.
-output_directory = FFD_LS
+output_directory = BoundaryDisplacement
 
 # Elasticity
 # StokesEnergy
-problem = StokesEnergy
+problem = Elasticity
 
 # BoundaryDisplacement
 # FFD
 # FFD_LS
 # DesignElement
-technique = FFD_LS
+technique = BoundaryDisplacement
 
 ################################################################
 ## Problem-related parameters.
@@ -38,17 +38,16 @@ technique = FFD_LS
 ## Technique-related parameters.
 ################################################################
 [Technique]
-    step              = 0.0000125
-    #step              = 0.000125
+    step              = 0.125
     maxIterationsNo   = 100
-    tolerance         = 1.0e-4
+    tolerance         = 1.0e-3
     volume_constraint = 1
     armijoSlope       = -1.0e-1
     
-    #boundingBoxSW = '0.0 0.0'
-    #boundingBoxNE = '5.0 4.0'
-    boundingBoxSW = '-0.5 -0.3'
-    boundingBoxNE = '1.0 0.3'
+    boundingBoxSW = '0.0 0.0'
+    boundingBoxNE = '5.0 4.0'
+    #boundingBoxSW = '-0.5 -0.3'
+    #boundingBoxNE = '1.0 0.3'
     
     [./FFD]
         subdivisionsX = 8

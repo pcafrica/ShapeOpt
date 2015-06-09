@@ -3,14 +3,19 @@ border b2(t = 1.5, 2.5) { x = 5; y = t; label = 1; };
 border b3(t = 5, 0) { x = t; y = -0.3 * t + 4; label = 2; };
 border b4(t = 4, 3) { x = 0; y = t; label = 3; };
 //border b5(t = 3, 1) { x = 0; y = t; label = 4; };
-border b5(t = pi/2, -pi/2) { x = 0.1*cos(t); y = 2 + sin(t); label = 4; };
+border b5(t = pi / 2, -pi / 2) { x = 0.1 * cos(t); y = 2 + sin(t); label = 4; };
 border b6(t = 1, 0) { x = 0; y = t; label = 5; };
+
+border hole(t = 0, 2 * pi) { x = 0.4 * cos(t) + 2; y = 0.4 * sin(t) + 2; label = 6; };
 
 int n = 10;
 
-mesh Th = buildmesh(b1(5 * n) + b2(n) + b3(5 * n) + b4(n) + b5(2 * n) + b6(n));
+mesh Th = buildmesh(b1(5 * n) + b2(n) + b3(5 * n) + b4(n) + b5(2 * n) + b6(n) /*+ hole(-2 * n)*/);
 
 plot(Th, wait = true);
 
+/*
+ * Export to GMSH file format.
+ */
 include "writeMesh.edp"
 writeMesh("cantilever.msh", Th);
