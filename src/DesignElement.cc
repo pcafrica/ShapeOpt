@@ -29,7 +29,7 @@ DesignElement::DesignElement(const Problem & problem, const std::string & direct
     P_(n / 2 - 1, n / 2 - 1) = order - 1;
     P_(n - 1, n - 1) = order - 1;
     
-    P_ *= M_SQRT2;
+    P_ *= 0.5;
 }
 
 void DesignElement::computePerturbation(EquationSystems & perturbation, EquationSystems & stateAdj)
