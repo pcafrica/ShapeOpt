@@ -1,0 +1,4 @@
+<map id="StokesEnergyState" name="StokesEnergyState">
+<area shape="rect" id="node3" href="$classProblemStokesEnergy.html" title="Classe che eredita da Problem e che rappresenta il problema di Stokes. " alt="" coords="108,83,260,109"/>
+<area shape="rect" id="node4" href="$classProblem.html" title="Classe astratta comune a tutti i problemi su cui si applica l&#39;ottimizzazione. " alt="" coords="149,5,219,32"/>
+</map>

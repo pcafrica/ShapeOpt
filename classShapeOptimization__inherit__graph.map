@@ -1,0 +1,6 @@
+<map id="ShapeOptimization" name="ShapeOptimization">
+<area shape="rect" id="node2" href="$classBoundaryDisplacement.html" title="Classe che eredita da ShapeOptimization. Utilizza la tecnica del boundary local displacement per eseg..." alt="" coords="5,80,163,107"/>
+<area shape="rect" id="node3" href="$classDesignElement.html" title="Classe che eredita dalla classe ShapeOptimization, utilizza il metodo del Design Element descrivendo ..." alt="" coords="187,80,297,107"/>
+<area shape="rect" id="node4" href="$classFFD.html" title="Classe che eredita dalla classe ShapeOptimization, utilizza il metodo della Free Form Deformation uti..." alt="" coords="323,80,371,107"/>
+<area shape="rect" id="node5" href="$classFFD__LS.html" title="Classe che eredita dalla classe FFD, utilizza il metodo dei minimi quadrati con rilassamento per calc..." alt="" coords="311,155,381,181"/>
+</map>
